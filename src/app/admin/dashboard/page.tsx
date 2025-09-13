@@ -1,7 +1,41 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShieldCheck, TrendingUp, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  ShieldCheck,
+  TrendingUp,
+  Users,
+  Check,
+  X,
+  Building,
+} from 'lucide-react';
 
 export default function AdminDashboardPage() {
+  const institutionRequests = [
+    {
+      name: 'Ranchi University',
+      type: 'University',
+      date: '2023-10-26',
+    },
+    {
+      name: 'TechCorp Inc.',
+      type: 'Company',
+      date: '2023-10-25',
+    },
+    {
+      name: 'BIT Mesra',
+      type: 'University',
+      date: '2023-10-24',
+    },
+  ];
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="mb-10">
@@ -57,12 +91,39 @@ export default function AdminDashboardPage() {
       <div className="mt-8">
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle>Institution Verification Requests</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">
-              Activity feed will be displayed here.
-            </p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Institution Name</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Date Submitted</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {institutionRequests.map((req) => (
+                  <TableRow key={req.name}>
+                    <TableCell className="font-medium flex items-center gap-2">
+                      <Building className="h-4 w-4 text-muted-foreground" />
+                      {req.name}
+                    </TableCell>
+                    <TableCell>{req.type}</TableCell>
+                    <TableCell>{req.date}</TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="icon" className="text-green-500 hover:text-green-600">
+                        <Check className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600">
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       </div>

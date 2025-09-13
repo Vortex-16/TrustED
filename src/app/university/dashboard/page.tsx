@@ -6,7 +6,16 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileUp, History, BarChart2 } from 'lucide-react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { FileUp, History, BarChart2, CheckCircle, XCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
 
 export default function UniversityDashboardPage() {
@@ -30,6 +39,65 @@ export default function UniversityDashboardPage() {
       change: 'Maintained consistently',
     },
   ];
+
+  const studentVerifications = [
+    {
+      id: 'VER-001',
+      studentName: 'Amit Kumar',
+      date: '2023-11-01',
+      status: 'Verified',
+      score: 95,
+    },
+    {
+      id: 'VER-002',
+      studentName: 'Priya Sharma',
+      date: '2023-11-01',
+      status: 'Failed',
+      score: 32,
+    },
+    {
+      id: 'VER-003',
+      studentName: 'Rahul Singh',
+      date: '2023-10-31',
+      status: 'Verified',
+      score: 88,
+    },
+    {
+      id: 'VER-004',
+      studentName: 'Anjali Gupta',
+      date: '2023-10-30',
+      status: 'In Review',
+      score: 65,
+    },
+  ];
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'Verified':
+        return (
+          <Badge variant="default" className="bg-green-100 text-green-800">
+            <CheckCircle className="mr-1 h-3 w-3" />
+            {status}
+          </Badge>
+        );
+      case 'Failed':
+        return (
+          <Badge variant="destructive">
+            <XCircle className="mr-1 h-3 w-3" />
+            {status}
+          </Badge>
+        );
+      case 'In Review':
+        return (
+          <Badge variant="secondary">
+            <Clock className="mr-1 h-3 w-3" />
+            {status}
+          </Badge>
+        );
+      default:
+        return <Badge>{status}</Badge>;
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -67,16 +135,34 @@ export default function UniversityDashboardPage() {
       <div className="mt-8">
         <Card>
           <CardHeader>
-            <CardTitle>Recent Verification Requests</CardTitle>
+            <CardTitle>Student Verification Status</CardTitle>
             <CardDescription>
-              A log of recent verification attempts on your institution's
-              certificates.
+              Recent verification history for your students' certificates.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">
-              Verification request log will be displayed here.
-            </p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Verification ID</TableHead>
+                  <TableHead>Student Name</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Auth. Score</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {studentVerifications.map((v) => (
+                  <TableRow key={v.id}>
+                    <TableCell className="font-mono text-xs">{v.id}</TableCell>
+                    <TableCell className="font-medium">{v.studentName}</TableCell>
+                    <TableCell>{v.date}</TableCell>
+                    <TableCell>{getStatusBadge(v.status)}</TableCell>
+                    <TableCell className="text-right font-medium">{v.score}%</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       </div>
