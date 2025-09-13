@@ -41,13 +41,14 @@ const ACCEPTED_FILE_TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
 
 const formSchema = z.object({
   certificate: z
-    .custom<File>((v) => v instanceof File, 'Please upload a file.')
+    .any()
+    .refine((files) => files?.length == 1, 'Please upload a file.')
     .refine(
-      (file) => file.size <= MAX_FILE_SIZE,
+      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
       `File size must be less than 5MB.`
     )
     .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file.type),
+      (files) => ACCEPTED_FILE_TYPES.includes(files?.[0]?.type),
       'Only .jpg, .png, and .pdf files are accepted.'
     ),
 });
@@ -61,6 +62,9 @@ export default function VerifyForm() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      certificate: undefined,
+    },
   });
 
   const fileRef = form.register('certificate');
@@ -86,7 +90,8 @@ export default function VerifyForm() {
     setIsLoading(true);
     setResult(null);
     try {
-      const dataUri = await fileToDataUri(values.certificate);
+      const file = values.certificate[0];
+      const dataUri = await fileToDataUri(file);
       const validationResult = await validateCertificateAuthenticity({
         certificateDataUri: dataUri,
       });
@@ -137,7 +142,7 @@ export default function VerifyForm() {
                           className="absolute w-full h-full opacity-0 cursor-pointer"
                           {...fileRef}
                           onChange={(e) => {
-                            field.onChange(e.target.files?.[0]);
+                            field.onChange(e.target.files);
                             setFileName(e.target.files?.[0]?.name || '');
                           }}
                         />
