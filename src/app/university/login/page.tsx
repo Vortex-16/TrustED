@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -12,6 +15,13 @@ import { Label } from '@/components/ui/label';
 import { Building } from 'lucide-react';
 
 export default function UniversityLoginPage() {
+  const router = useRouter();
+
+  const handleSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push('/university/dashboard');
+  };
+
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4 py-12">
       <Card className="w-full max-w-md">
@@ -27,14 +37,14 @@ export default function UniversityLoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSignIn}>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="you@youruniversity.edu"
-                required
+                defaultValue="user@university.edu"
               />
             </div>
             <div className="space-y-2">
@@ -47,7 +57,7 @@ export default function UniversityLoginPage() {
                   Forgot password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" type="password" defaultValue="password" />
             </div>
             <Button type="submit" className="w-full font-bold">
               Sign In
