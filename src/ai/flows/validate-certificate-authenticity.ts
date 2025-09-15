@@ -51,6 +51,8 @@ const prompt = ai.definePrompt({
   - Presence of official seals, signatures, and watermarks
   - Consistency of dates, names, and identification numbers
 
+  When analyzing dates, be mindful that a future date (e.g., for a course completion in 2025) might indicate a provisional certificate or a future event, and is not necessarily a sign of fraud. Note this in your validation details if applicable.
+
   Provide a confidence score between 0 and 1, where 1 indicates a high likelihood of authenticity and 0 indicates a high likelihood of fraud.
 
   Also, provide detailed validation details explaining the reasoning behind the confidence score, highlighting any anomalies or inconsistencies found.
