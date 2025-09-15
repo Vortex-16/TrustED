@@ -44,14 +44,14 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert in document authentication, specializing in identifying fraudulent certificates.
   Analyze the provided certificate document and determine its likelihood of being genuine.
 
+  IMPORTANT: When analyzing dates, be mindful that a future date (e.g., for a course completion in 2025) might indicate a provisional certificate or a future event, and is not necessarily a sign of fraud. Note this in your validation details if applicable, but DO NOT lower the confidence score solely based on a future date.
+
   Evaluate the document based on formatting conventions, data consistency, and overall visual integrity.
   Pay close attention to:
   - Font styles and sizes
   - Alignment and spacing of text elements
   - Presence of official seals, signatures, and watermarks
   - Consistency of dates, names, and identification numbers
-
-  When analyzing dates, be mindful that a future date (e.g., for a course completion in 2025) might indicate a provisional certificate or a future event, and is not necessarily a sign of fraud. Note this in your validation details if applicable.
 
   Provide a confidence score between 0 and 1, where 1 indicates a high likelihood of authenticity and 0 indicates a high likelihood of fraud.
 
