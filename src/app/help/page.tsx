@@ -50,7 +50,7 @@ export default function HelpPage() {
             Help & Support
           </h1>
           <p className="mt-2 text-lg text-muted-foreground">
-            Find answers to your questions and learn how to use VerifyEd
+            Find answers to your questions and learn how to use TrustED
             effectively.
           </p>
         </div>
@@ -87,10 +87,10 @@ export default function HelpPage() {
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-primary" />
                   <a
-                    href="mailto:support@verifyed.gov.in"
+                    href="mailto:support@trusted.gov.in"
                     className="text-sm hover:underline"
                   >
-                    support@verifyed.gov.in
+                    support@trusted.gov.in
                   </a>
                 </div>
                 <div className="flex items-center gap-3">

@@ -6,7 +6,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: 'VerifyEd - Academic Authenticity Validator',
+  title: 'TrustED - Academic Authenticity Validator',
   description:
     'A smart, scalable, and secure system to authenticate and detect fake degrees or certificates.',
 };

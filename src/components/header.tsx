@@ -10,7 +10,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2">
             <GraduationCap className="h-8 w-8 text-primary" />
             <span className="text-xl font-bold font-headline text-primary">
-              VerifyEd
+              TrustED
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-2">

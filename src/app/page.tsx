@@ -56,7 +56,7 @@ export default function Home() {
       <section className="w-full bg-card py-20 md:py-32">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tight">
-            VerifyEd
+            TrustED
           </h1>
           <p className="mt-4 max-w3xl mx-auto text-lg md:text-xl text-muted-foreground font-body">
             Preserving Academic Integrity with Secure, AI-Powered Certificate
