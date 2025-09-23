@@ -4,16 +4,16 @@ import { Button } from '@/components/ui/button';
 
 export default function Header() {
   return (
-    <header className="bg-card border-b sticky top-0 z-50">
+    <header className="bg-background/95 backdrop-blur-sm border-b sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2">
             <GraduationCap className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold font-headline text-primary">
+            <span className="text-xl font-bold text-primary">
               TrustED
             </span>
           </Link>
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-1">
             <Button variant="ghost" asChild>
               <Link href="/verify">Verify Certificate</Link>
             </Button>

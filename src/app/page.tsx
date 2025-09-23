@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -53,12 +54,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center">
-      <section className="w-full bg-card py-20 md:py-32">
+      <section className="w-full bg-background py-24 md:py-32">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-primary tracking-tight">
             TrustED
           </h1>
-          <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground font-body">
+          <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
             Preserving Academic Integrity with Secure, AI-Powered Certificate
             Verification.
           </p>
@@ -75,33 +76,31 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="w-full py-16 md:py-24">
+      <section className="w-full py-16 md:py-24 bg-muted/40">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature) => (
               <Card
                 key={feature.title}
-                className="flex flex-col hover:shadow-lg transition-shadow duration-300"
+                className="flex flex-col bg-card hover:shadow-lg transition-shadow duration-300"
               >
-                <CardHeader className="flex flex-row items-start gap-4">
+                <CardHeader>
                   {feature.icon}
-                  <div className="flex-1">
-                    <CardTitle className="text-xl font-headline">
-                      {feature.title}
-                    </CardTitle>
-                  </div>
                 </CardHeader>
                 <CardContent className="flex-grow">
-                  <CardDescription>{feature.description}</CardDescription>
+                  <CardTitle className="text-xl">
+                    {feature.title}
+                  </CardTitle>
+                  <CardDescription className="mt-2">{feature.description}</CardDescription>
                 </CardContent>
-                <div className="p-6 pt-0 mt-auto">
-                  <Button asChild className="w-full font-bold group">
+                <CardFooter>
+                  <Button asChild variant="secondary" className="w-full font-bold group">
                     <Link href={feature.href}>
                       {feature.cta}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </Button>
-                </div>
+                </CardFooter>
               </Card>
             ))}
           </div>
