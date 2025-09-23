@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 const VerifyCertificateIcon = () => (
-  <svg viewBox="0 0 100 100" className="w-12 h-12">
+  <svg viewBox="0 0 100 100" className="w-12 h-12 transition-transform duration-300 group-hover:scale-110">
     <path
       d="M83.33,16.67H16.67A8.33,8.33,0,0,0,8.33,25V75a8.33,8.33,0,0,0,8.34,8.33H83.33A8.33,8.33,0,0,0,91.67,75V25A8.33,8.33,0,0,0,83.33,16.67Z"
       style={{
@@ -38,7 +38,7 @@ const VerifyCertificateIcon = () => (
 );
 
 const UniversityPortalIcon = () => (
-    <svg viewBox="0 0 100 100" className="w-12 h-12">
+    <svg viewBox="0 0 100 100" className="w-12 h-12 transition-transform duration-300 group-hover:scale-110">
         <path d="M16.67,83.33V33.33L50,16.67l33.33,16.66V83.33" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
         <rect x="25" y="58.33" width="50" height="25" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
         <line x1="16.67" y1="83.33" x2="83.33" y2="83.33" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
@@ -48,7 +48,7 @@ const UniversityPortalIcon = () => (
 
 
 const AdminIcon = () => (
-    <svg viewBox="0 0 100 100" className="w-12 h-12">
+    <svg viewBox="0 0 100 100" className="w-12 h-12 transition-transform duration-300 group-hover:scale-110">
         <path d="M50,62.5a16.67,16.67,0,1,0-16.67-16.67A16.67,16.67,0,0,0,50,62.5Z" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
         <path d="M75.67,83.33A25,25,0,0,0,50,66.67h0a25,25,0,0,0-25.67,16.66" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
         <path d="M84.7,45.83a8.33,8.33,0,1,1-8.33-8.33,8.33,8.33,0,0,1,8.33,8.33Z" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
@@ -57,7 +57,7 @@ const AdminIcon = () => (
 );
 
 const HelpIcon = () => (
-    <svg viewBox="0 0 100 100" className="w-12 h-12">
+    <svg viewBox="0 0 100 100" className="w-12 h-12 transition-transform duration-300 group-hover:scale-110">
         <circle cx="50" cy="50" r="33.33" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
         <path d="M37.5,41.67a12.5,12.5,0,1,1,25,0c0,8.33-12.5,12.5-12.5,12.5" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
         <line x1="50" y1="66.67" x2="50" y2="66.67" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
@@ -131,16 +131,16 @@ cta: 'Get Help',
             {features.map((feature) => (
               <Card
                 key={feature.title}
-                className="flex flex-col bg-card hover:shadow-lg transition-shadow duration-300"
+                className="flex flex-col bg-card hover:shadow-lg transition-shadow duration-300 group"
               >
-                <CardHeader>
+                <CardHeader className="flex justify-center">
                   {feature.icon}
                 </CardHeader>
                 <CardContent className="flex-grow">
-                  <CardTitle className="text-xl font-headline">
+                  <CardTitle className="text-xl font-headline text-center">
                     {feature.title}
                   </CardTitle>
-                  <CardDescription className="mt-2">{feature.description}</CardDescription>
+                  <CardDescription className="mt-2 text-center">{feature.description}</CardDescription>
                 </CardContent>
                 <CardFooter>
                   <Button asChild variant="outline" className="w-full font-bold group border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground">
