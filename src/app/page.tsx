@@ -19,7 +19,7 @@ import {
 export default function Home() {
   const features = [
     {
-      icon: <ShieldCheck className="w-8 h-8 text-primary" />,
+      icon: <ShieldCheck className="w-8 h-8 text-secondary" />,
       title: 'Verify Certificate',
       description:
         'Upload a certificate to instantly check its authenticity using our advanced AI-powered validation tool.',
@@ -27,7 +27,7 @@ export default function Home() {
       cta: 'Verify Now',
     },
     {
-      icon: <Building className="w-8 h-8 text-primary" />,
+      icon: <Building className="w-8 h-8 text-secondary" />,
       title: 'University Portal',
       description:
         'Institutions can log in to manage certificate records, view verification statistics, and maintain academic integrity.',
@@ -35,7 +35,7 @@ export default function Home() {
       cta: 'Access Portal',
     },
     {
-      icon: <UserCog className="w-8 h-8 text-primary" />,
+      icon: <UserCog className="w-8 h-8 text-secondary" />,
       title: 'Admin / Government',
       description:
         'Authorized bodies can access the admin dashboard to monitor activity, detect trends, and manage the ecosystem.',
@@ -43,12 +43,12 @@ export default function Home() {
       cta: 'Admin Login',
     },
     {
-      icon: <HelpCircle className="w-8 h-8 text-primary" />,
+      icon: <HelpCircle className="w-8 h-8 text-secondary" />,
       title: 'Help & Support',
       description:
         'Find answers to common questions, get guidance on using the platform, and learn how to get support.',
       href: '/help',
-      cta: 'Get Help',
+cta: 'Get Help',
     },
   ];
 
@@ -88,13 +88,13 @@ export default function Home() {
                   {feature.icon}
                 </CardHeader>
                 <CardContent className="flex-grow">
-                  <CardTitle className="text-xl">
+                  <CardTitle className="text-xl font-headline">
                     {feature.title}
                   </CardTitle>
                   <CardDescription className="mt-2">{feature.description}</CardDescription>
                 </CardContent>
                 <CardFooter>
-                  <Button asChild variant="secondary" className="w-full font-bold group">
+                  <Button asChild variant="outline" className="w-full font-bold group border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground">
                     <Link href={feature.href}>
                       {feature.cta}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

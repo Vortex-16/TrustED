@@ -1,12 +1,16 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { PT_Sans } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+const ptSans = PT_Sans({ 
+  subsets: ['latin'], 
+  weight: ['400', '700'],
+  variable: '--font-sans',
+});
 
 export const metadata: Metadata = {
   title: 'TrustED - Academic Authenticity Validator',
@@ -24,7 +28,7 @@ export default function RootLayout({
       <body
         className={cn(
           'font-sans antialiased flex flex-col min-h-screen',
-          inter.variable
+          ptSans.variable
         )}
       >
         <Header />
