@@ -58,7 +58,7 @@ export default function Home() {
           <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tight">
             TrustED
           </h1>
-          <p className="mt-4 max-w3xl mx-auto text-lg md:text-xl text-muted-foreground font-body">
+          <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground font-body">
             Preserving Academic Integrity with Secure, AI-Powered Certificate
             Verification.
           </p>
