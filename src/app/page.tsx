@@ -9,17 +9,66 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
-  ShieldCheck,
-  Building,
-  UserCog,
-  HelpCircle,
   ArrowRight,
 } from 'lucide-react';
+
+const VerifyCertificateIcon = () => (
+  <svg viewBox="0 0 100 100" className="w-12 h-12">
+    <path
+      d="M83.33,16.67H16.67A8.33,8.33,0,0,0,8.33,25V75a8.33,8.33,0,0,0,8.34,8.33H83.33A8.33,8.33,0,0,0,91.67,75V25A8.33,8.33,0,0,0,83.33,16.67Z"
+      style={{
+        fill: 'none',
+        stroke: 'hsl(var(--secondary))',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: '4px',
+      }}
+    />
+    <polyline
+      points="33.33 50 45.83 62.5 66.67 41.67"
+      style={{
+        fill: 'none',
+        stroke: 'hsl(var(--primary))',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: '6px',
+      }}
+    />
+  </svg>
+);
+
+const UniversityPortalIcon = () => (
+    <svg viewBox="0 0 100 100" className="w-12 h-12">
+        <path d="M16.67,83.33V33.33L50,16.67l33.33,16.66V83.33" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
+        <rect x="25" y="58.33" width="50" height="25" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
+        <line x1="16.67" y1="83.33" x2="83.33" y2="83.33" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
+        <circle cx="50" cy="41.67" r="8.33" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
+  </svg>
+);
+
+
+const AdminIcon = () => (
+    <svg viewBox="0 0 100 100" className="w-12 h-12">
+        <path d="M50,62.5a16.67,16.67,0,1,0-16.67-16.67A16.67,16.67,0,0,0,50,62.5Z" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
+        <path d="M75.67,83.33A25,25,0,0,0,50,66.67h0a25,25,0,0,0-25.67,16.66" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
+        <path d="M84.7,45.83a8.33,8.33,0,1,1-8.33-8.33,8.33,8.33,0,0,1,8.33,8.33Z" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
+        <path d="M23.63,45.83a8.33,8.33,0,1,0-8.33-8.33A8.33,8.33,0,0,0,23.63,45.83Z" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
+    </svg>
+);
+
+const HelpIcon = () => (
+    <svg viewBox="0 0 100 100" className="w-12 h-12">
+        <circle cx="50" cy="50" r="33.33" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
+        <path d="M37.5,41.67a12.5,12.5,0,1,1,25,0c0,8.33-12.5,12.5-12.5,12.5" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
+        <line x1="50" y1="66.67" x2="50" y2="66.67" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
+    </svg>
+);
+
 
 export default function Home() {
   const features = [
     {
-      icon: <ShieldCheck className="w-8 h-8 text-secondary" />,
+      icon: <VerifyCertificateIcon />,
       title: 'Verify Certificate',
       description:
         'Upload a certificate to instantly check its authenticity using our advanced AI-powered validation tool.',
@@ -27,7 +76,7 @@ export default function Home() {
       cta: 'Verify Now',
     },
     {
-      icon: <Building className="w-8 h-8 text-secondary" />,
+      icon: <UniversityPortalIcon />,
       title: 'University Portal',
       description:
         'Institutions can log in to manage certificate records, view verification statistics, and maintain academic integrity.',
@@ -35,7 +84,7 @@ export default function Home() {
       cta: 'Access Portal',
     },
     {
-      icon: <UserCog className="w-8 h-8 text-secondary" />,
+      icon: <AdminIcon />,
       title: 'Admin / Government',
       description:
         'Authorized bodies can access the admin dashboard to monitor activity, detect trends, and manage the ecosystem.',
@@ -43,7 +92,7 @@ export default function Home() {
       cta: 'Admin Login',
     },
     {
-      icon: <HelpCircle className="w-8 h-8 text-secondary" />,
+      icon: <HelpIcon />,
       title: 'Help & Support',
       description:
         'Find answers to common questions, get guidance on using the platform, and learn how to get support.',
