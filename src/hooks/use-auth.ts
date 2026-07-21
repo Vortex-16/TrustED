@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { auth } from '@/lib/firebase';
+import { getFirebaseAuth } from '@/lib/firebase';
 import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
@@ -22,42 +22,50 @@ export function useAuth() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
-      setLoading(true);
-      if (firebaseUser) {
-        try {
-          const idToken = await getIdToken(firebaseUser);
-          
-          // Exchange Firebase ID Token with backend JWT (simulated in frontend, or via API call)
-          const role = firebaseUser.email?.includes('admin')
-            ? 'ADMIN'
-            : firebaseUser.email?.includes('gov')
-            ? 'ADMIN'
-            : 'UNIVERSITY_ADMIN';
+    if (typeof window === 'undefined') return;
 
-          setUser({
-            uid: firebaseUser.uid,
-            email: firebaseUser.email,
-            displayName: firebaseUser.displayName,
-            accessToken: idToken,
-            role: role as any,
-          });
-        } catch (err: any) {
-          setError(err.message || 'Failed to retrieve auth token');
+    try {
+      const auth = getFirebaseAuth();
+      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
+        setLoading(true);
+        if (firebaseUser) {
+          try {
+            const idToken = await getIdToken(firebaseUser);
+            
+            const role = firebaseUser.email?.includes('admin')
+              ? 'ADMIN'
+              : firebaseUser.email?.includes('gov')
+              ? 'ADMIN'
+              : 'UNIVERSITY_ADMIN';
+
+            setUser({
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              displayName: firebaseUser.displayName,
+              accessToken: idToken,
+              role: role as any,
+            });
+          } catch (err: any) {
+            setError(err.message || 'Failed to retrieve auth token');
+          }
+        } else {
+          setUser(null);
         }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
+        setLoading(false);
+      });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    } catch (err: any) {
+      console.warn('Firebase Auth initialization skipped in static render:', err);
+      setLoading(false);
+    }
   }, []);
 
   const signIn = async (email: string, pass: string) => {
     setLoading(true);
     setError(null);
     try {
+      const auth = getFirebaseAuth();
       await signInWithEmailAndPassword(auth, email, pass);
     } catch (err: any) {
       let customError = 'Invalid email or password';
@@ -74,7 +82,12 @@ export function useAuth() {
 
   const signOut = async () => {
     setLoading(true);
-    await firebaseSignOut(auth);
+    try {
+      const auth = getFirebaseAuth();
+      await firebaseSignOut(auth);
+    } catch (e) {
+      console.error(e);
+    }
     setUser(null);
     setLoading(false);
   };
