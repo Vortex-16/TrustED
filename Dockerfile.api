@@ -7,7 +7,7 @@ RUN apk add --no-cache tesseract-ocr build-base python3
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 # Step 2: Build NestJS backend
 FROM base AS builder
