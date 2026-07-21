@@ -1,0 +1,160 @@
+// VerifyEd v2.0 Enterprise Prisma Schema
+// Target DB: PostgreSQL (Neon / Supabase)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  UNIVERSITY_ADMIN
+  EMPLOYER
+  GOVERNMENT_AUDITOR
+  PLATFORM_ADMIN
+}
+
+enum KYCStatus {
+  PENDING
+  APPROVED
+  SUSPENDED
+  REJECTED
+}
+
+enum CertificateStatus {
+  ISSUED
+  VERIFIED
+  SUSPICIOUS
+  REVOKED
+}
+
+model University {
+  id                String       @id @default(uuid())
+  name              String
+  code              String       @unique
+  domain            String
+  walletAddress     String       @unique
+  taxId             String?
+  kycStatus         KYCStatus    @default(PENDING)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  users             User[]
+  certificates      Certificate[]
+
+  @@index([walletAddress])
+  @@index([kycStatus])
+}
+
+model User {
+  id                String       @id @default(uuid())
+  universityId      String?
+  email             String       @unique
+  fullName          String
+  walletAddress     String?      @unique
+  role              Role         @default(STUDENT)
+  mfaEnabled        Boolean      @default(false)
+  firebaseUid       String       @unique
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  university        University?  @relation(fields: [universityId], references: [id], onDelete: SetNull)
+  certificates      Certificate[] @relation("StudentCertificates")
+  auditLogs         AuditLog[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Certificate {
+  id                String            @id @default(uuid())
+  universityId      String
+  studentId         String?
+  certificateNumber String            @unique
+  studentName       String
+  studentRoll       String
+  degree            String
+  course            String
+  cgpa              Float?
+  issueDate         DateTime
+  ipfsCid           String
+  certificateHash   String            @unique
+  merkleRoot        String?
+  status            CertificateStatus @default(ISSUED)
+  qrCodeUrl         String?
+  extractedMetadata Json?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  university        University        @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  student           User?             @relation("StudentCertificates", fields: [studentId], references: [id], onDelete: SetNull)
+  fraudReports      FraudReport[]
+  revocations       Revocation[]
+
+  @@index([certificateHash])
+  @@index([universityId])
+  @@index([status])
+}
+
+model FraudReport {
+  id                String       @id @default(uuid())
+  certificateId     String
+  confidenceScore   Float        // 0.0 to 100.0%
+  riskScore         Float        // 0.0 to 100.0%
+  forgeryProbability Float       // 0.0 to 1.0
+  fontScore         Float
+  layoutScore       Float
+  watermarkScore    Float
+  exifScore         Float
+  ocrScore          Float
+  details           Json
+  scannedAt         DateTime     @default(now())
+
+  certificate       Certificate  @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+
+  @@index([certificateId])
+}
+
+model Revocation {
+  id                String       @id @default(uuid())
+  certificateId     String
+  reason            String
+  txHash            String
+  revokedAt         DateTime     @default(now())
+
+  certificate       Certificate  @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+
+  @@index([certificateId])
+}
+
+model AuditLog {
+  id                String       @id @default(uuid())
+  userId            String?
+  action            String
+  resource          String
+  ipAddress         String
+  userAgent         String?
+  metadata          Json?
+  timestamp         DateTime     @default(now())
+
+  user              User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([timestamp])
+  @@index([userId])
+}
+
+model ApiKey {
+  id                String       @id @default(uuid())
+  organizationName  String
+  keyHash           String       @unique
+  permissions       String[]
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  expiresAt         DateTime?
+
+  @@index([keyHash])
+}

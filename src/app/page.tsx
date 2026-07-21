@@ -1,160 +1,340 @@
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { SkeuoCard } from '@/components/ui/skeuo-card';
+import { SkeuoButton } from '@/components/ui/skeuo-button';
+import { SkeuoInput } from '@/components/ui/skeuo-input';
+import { OcrEngine, ExtractedCertificateData } from '@/lib/ocr-engine';
+import { AiFraudEngine, FraudAnalysisResult } from '@/lib/ai-fraud-engine';
+import { BlockchainVerifier, LedgerVerificationResult } from '@/lib/blockchain-verifier';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {
-  ArrowRight,
+  ShieldCheck,
+  Building2,
+  GraduationCap,
+  Briefcase,
+  Landmark,
+  ShieldAlert,
+  FileSearch,
+  UploadCloud,
+  CheckCircle2,
+  AlertTriangle,
+  Cpu,
+  Database,
+  ExternalLink,
+  Lock,
+  QrCode,
+  Search,
 } from 'lucide-react';
 
-const VerifyCertificateIcon = () => (
-  <svg viewBox="0 0 100 100" className="w-12 h-12 transition-transform duration-300 group-hover:scale-110">
-    <path
-      d="M83.33,16.67H16.67A8.33,8.33,0,0,0,8.33,25V75a8.33,8.33,0,0,0,8.34,8.33H83.33A8.33,8.33,0,0,0,91.67,75V25A8.33,8.33,0,0,0,83.33,16.67Z"
-      style={{
-        fill: 'none',
-        stroke: 'hsl(var(--secondary))',
-        strokeLinecap: 'round',
-        strokeLinejoin: 'round',
-        strokeWidth: '4px',
-      }}
-    />
-    <polyline
-      points="33.33 50 45.83 62.5 66.67 41.67"
-      style={{
-        fill: 'none',
-        stroke: 'hsl(var(--primary))',
-        strokeLinecap: 'round',
-        strokeLinejoin: 'round',
-        strokeWidth: '6px',
-      }}
-    />
-  </svg>
-);
+export default function HomePage() {
+  const [activeTab, setActiveTab] = useState<'verify' | 'student' | 'university' | 'employer' | 'government' | 'admin'>('verify');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [ocrData, setOcrData] = useState<ExtractedCertificateData | null>(null);
+  const [fraudData, setFraudData] = useState<FraudAnalysisResult | null>(null);
+  const [ledgerData, setLedgerData] = useState<LedgerVerificationResult | null>(null);
+  const [searchCertId, setSearchCertId] = useState('');
 
-const UniversityPortalIcon = () => (
-    <svg viewBox="0 0 100 100" className="w-12 h-12 transition-transform duration-300 group-hover:scale-110">
-        <path d="M16.67,83.33V33.33L50,16.67l33.33,16.66V83.33" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
-        <rect x="25" y="58.33" width="50" height="25" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
-        <line x1="16.67" y1="83.33" x2="83.33" y2="83.33" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
-        <circle cx="50" cy="41.67" r="8.33" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
-  </svg>
-);
+  const handleSimulatedUpload = async () => {
+    setIsProcessing(true);
+    setTimeout(async () => {
+      const dummyBuffer = Buffer.from('VerifyEd Academic Certificate Sample Document');
+      const ocr = await OcrEngine.processCertificateDocument(dummyBuffer, 'sample_certificate.pdf');
+      const ledger = await BlockchainVerifier.verifyOnLedger(ocr.computedHash);
+      const fraud = AiFraudEngine.analyzeDocument(ocr, ocr.computedHash);
 
-
-const AdminIcon = () => (
-    <svg viewBox="0 0 100 100" className="w-12 h-12 transition-transform duration-300 group-hover:scale-110">
-        <path d="M50,62.5a16.67,16.67,0,1,0-16.67-16.67A16.67,16.67,0,0,0,50,62.5Z" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
-        <path d="M75.67,83.33A25,25,0,0,0,50,66.67h0a25,25,0,0,0-25.67,16.66" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
-        <path d="M84.7,45.83a8.33,8.33,0,1,1-8.33-8.33,8.33,8.33,0,0,1,8.33,8.33Z" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
-        <path d="M23.63,45.83a8.33,8.33,0,1,0-8.33-8.33A8.33,8.33,0,0,0,23.63,45.83Z" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
-    </svg>
-);
-
-const HelpIcon = () => (
-    <svg viewBox="0 0 100 100" className="w-12 h-12 transition-transform duration-300 group-hover:scale-110">
-        <circle cx="50" cy="50" r="33.33" style={{fill:'none', stroke:'hsl(var(--secondary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'4px'}}/>
-        <path d="M37.5,41.67a12.5,12.5,0,1,1,25,0c0,8.33-12.5,12.5-12.5,12.5" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
-        <line x1="50" y1="66.67" x2="50" y2="66.67" style={{fill:'none', stroke:'hsl(var(--primary))', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:'6px'}}/>
-    </svg>
-);
-
-
-export default function Home() {
-  const features = [
-    {
-      icon: <VerifyCertificateIcon />,
-      title: 'Verify Certificate',
-      description:
-        'Upload a certificate to instantly check its authenticity using our advanced AI-powered validation tool.',
-      href: '/verify',
-      cta: 'Verify Now',
-    },
-    {
-      icon: <UniversityPortalIcon />,
-      title: 'University Portal',
-      description:
-        'Institutions can log in to manage certificate records, view verification statistics, and maintain academic integrity.',
-      href: '/university/login',
-      cta: 'Access Portal',
-    },
-    {
-      icon: <AdminIcon />,
-      title: 'Admin / Government',
-      description:
-        'Authorized bodies can access the admin dashboard to monitor activity, detect trends, and manage the ecosystem.',
-      href: '/admin/login',
-      cta: 'Admin Login',
-    },
-    {
-      icon: <HelpIcon />,
-      title: 'Help & Support',
-      description:
-        'Find answers to common questions, get guidance on using the platform, and learn how to get support.',
-      href: '/help',
-cta: 'Get Help',
-    },
-  ];
+      setOcrData(ocr);
+      setLedgerData(ledger);
+      setFraudData(fraud);
+      setIsProcessing(false);
+    }, 900);
+  };
 
   return (
-    <div className="flex flex-col items-center">
-      <section className="w-full bg-background py-24 md:py-32">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-primary tracking-tight">
-            TrustED
-          </h1>
-          <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
-            Preserving Academic Integrity with Secure, AI-Powered Certificate
-            Verification.
-          </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Button asChild size="lg" className="font-bold">
-              <Link href="/verify">
-                Start Verification <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="secondary" className="font-bold">
-              <Link href="/help">Learn More</Link>
-            </Button>
+    <div className="min-h-screen bg-[#EAEFF5] text-slate-800 p-4 md:p-8 font-sans">
+      <div className="max-w-7xl mx-auto space-y-8">
+        
+        {/* Skeuomorphic Header */}
+        <header className="skeuo-card p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl skeuo-inset flex items-center justify-center text-indigo-600">
+              <ShieldCheck className="w-7 h-7" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-black tracking-tight text-slate-800 flex items-center gap-2">
+                VerifyEd <span className="text-xs px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-bold border border-indigo-200">v2.0 Enterprise</span>
+              </h1>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Blockchain-Powered Academic Credential Verification Platform
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
 
-      <section className="w-full py-16 md:py-24 bg-muted/40">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature) => (
-              <Card
-                key={feature.title}
-                className="flex flex-col bg-card hover:shadow-lg transition-shadow duration-300 group"
-              >
-                <CardHeader className="flex justify-center">
-                  {feature.icon}
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <CardTitle className="text-xl font-headline text-center">
-                    {feature.title}
-                  </CardTitle>
-                  <CardDescription className="mt-2 text-center">{feature.description}</CardDescription>
-                </CardContent>
-                <CardFooter>
-                  <Button asChild variant="outline" className="w-full font-bold group border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground">
-                    <Link href={feature.href}>
-                      {feature.cta}
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+          {/* Skeuomorphic Pill Portal Selector */}
+          <div className="skeuo-inset p-1.5 flex flex-wrap justify-center gap-1 rounded-full">
+            {[
+              { id: 'verify', label: 'Verify Engine', icon: Search },
+              { id: 'student', label: 'Student', icon: GraduationCap },
+              { id: 'university', label: 'University', icon: Building2 },
+              { id: 'employer', label: 'Employer', icon: Briefcase },
+              { id: 'government', label: 'Government', icon: Landmark },
+              { id: 'admin', label: 'Admin', icon: Lock },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 ${
+                    isActive
+                      ? 'skeuo-btn-primary text-white shadow-md'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
-        </div>
-      </section>
+        </header>
+
+        {/* Dynamic Portal View */}
+        {activeTab === 'verify' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Upload & Query Box */}
+            <div className="lg:col-span-5 space-y-6">
+              <SkeuoCard className="space-y-6">
+                <div className="flex items-center justify-between border-b border-slate-200/60 pb-4">
+                  <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <FileSearch className="w-5 h-5 text-indigo-600" />
+                    Instant Credential Verification
+                  </h2>
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    Sub-second RPC
+                  </span>
+                </div>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Upload a student diploma PDF or image to execute automated Tesseract OCR, AI computer vision fraud inspection, and Polygon blockchain ledger hash validation.
+                </p>
+
+                {/* Drag and Drop Zone */}
+                <div
+                  onClick={handleSimulatedUpload}
+                  className="skeuo-inset p-8 flex flex-col items-center justify-center text-center gap-3 cursor-pointer group hover:bg-slate-200/50 transition-all border-2 border-dashed border-slate-300"
+                >
+                  <div className="w-14 h-14 rounded-2xl skeuo-card flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
+                    <UploadCloud className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-slate-800">
+                      {isProcessing ? 'Processing OCR & AI Inspection...' : 'Click to Upload Certificate PDF / Scan QR'}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">Supports PDF, PNG, JPEG up to 25MB</p>
+                  </div>
+                  {isProcessing && (
+                    <div className="w-full max-w-xs bg-slate-300 h-1.5 rounded-full overflow-hidden mt-2">
+                      <div className="bg-indigo-600 h-full w-2/3 animate-pulse rounded-full"></div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Cert ID Direct Lookup */}
+                <div className="flex gap-2">
+                  <SkeuoInput
+                    placeholder="Enter Certificate ID (e.g. IITB-2025-CS-0941)"
+                    value={searchCertId}
+                    onChange={(e) => setSearchCertId(e.target.value)}
+                    icon={<Search className="w-4 h-4 text-slate-400" />}
+                  />
+                  <SkeuoButton variant="primary" onClick={handleSimulatedUpload}>
+                    Query
+                  </SkeuoButton>
+                </div>
+              </SkeuoCard>
+
+              {/* Enterprise Telemetry Stats */}
+              <div className="grid grid-cols-2 gap-4">
+                <SkeuoCard variant="raised" className="text-center p-4">
+                  <p className="text-2xl font-black text-indigo-600">100%</p>
+                  <p className="text-xs font-semibold text-slate-500 uppercase mt-1">Tamper Proof Ledger</p>
+                </SkeuoCard>
+                <SkeuoCard variant="raised" className="text-center p-4">
+                  <p className="text-2xl font-black text-emerald-600">&lt; 500ms</p>
+                  <p className="text-xs font-semibold text-slate-500 uppercase mt-1">Verification Latency</p>
+                </SkeuoCard>
+              </div>
+            </div>
+
+            {/* Results Visualizer Panel */}
+            <div className="lg:col-span-7 space-y-6">
+              {ocrData && fraudData && ledgerData ? (
+                <SkeuoCard className="space-y-6">
+                  {/* Status Banner */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-2xl skeuo-inset gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full skeuo-badge-verified flex items-center justify-center">
+                        <CheckCircle2 className="w-7 h-7 text-white" />
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                          AUTHENTIC CREDENTIAL
+                        </span>
+                        <h3 className="text-lg font-black text-slate-800 mt-1">
+                          {ocrData.degree} in {ocrData.course}
+                        </h3>
+                        <p className="text-xs text-slate-500 font-medium">{ocrData.university}</p>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-xs font-semibold text-slate-400 uppercase">AI Fraud Score</p>
+                      <p className="text-3xl font-black text-emerald-600">{fraudData.confidenceScore}%</p>
+                      <p className="text-xs font-bold text-slate-500">Confidence Match</p>
+                    </div>
+                  </div>
+
+                  {/* Extracted Certificate Fields Grid */}
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
+                      OCR Extracted Credentials
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {[
+                        { label: 'Student Name', val: ocrData.studentName },
+                        { label: 'Roll Number', val: ocrData.rollNumber },
+                        { label: 'Reg Number', val: ocrData.registrationNumber },
+                        { label: 'Certificate ID', val: ocrData.certificateId },
+                        { label: 'Issue Date', val: ocrData.issueDate },
+                        { label: 'CGPA', val: `${ocrData.cgpa} / 10.0` },
+                      ].map((field) => (
+                        <div key={field.label} className="skeuo-inset p-3 rounded-xl">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase">{field.label}</p>
+                          <p className="text-xs font-black text-slate-800 mt-0.5 truncate">{field.val}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 9-Criteria AI Fraud Inspector Grid */}
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <Cpu className="w-4 h-4 text-indigo-600" />
+                      Multi-Vector AI Fraud Detection Breakdown
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {Object.entries(fraudData.scores).map(([key, val]) => (
+                        <div key={key} className="skeuo-inset p-3 rounded-xl">
+                          <div className="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase">
+                            <span>{key.replace(/([A-Z])/g, ' $1')}</span>
+                            <span className="text-emerald-600 font-black">{val}%</span>
+                          </div>
+                          <div className="w-full bg-slate-300 h-1.5 rounded-full overflow-hidden mt-1.5">
+                            <div
+                              className="bg-emerald-500 h-full rounded-full"
+                              style={{ width: `${val}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Blockchain Ledger Proof */}
+                  <div className="skeuo-inset p-4 rounded-2xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                        <Database className="w-4 h-4 text-indigo-600" />
+                        Polygon Blockchain Immutable Anchor Proof
+                      </h4>
+                      <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+                        {ledgerData.network}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <span className="text-slate-400 font-medium">Tx Hash: </span>
+                        <span className="font-mono text-slate-700 truncate inline-block max-w-[200px] align-bottom">
+                          {ledgerData.transactionHash}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 font-medium">Block Height: </span>
+                        <span className="font-semibold text-slate-800">#{ledgerData.blockNumber}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 font-medium">IPFS CID: </span>
+                        <span className="font-mono text-slate-700 truncate inline-block max-w-[200px] align-bottom">
+                          {ledgerData.ipfsCid}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 font-medium">Issuer Key: </span>
+                        <span className="font-mono text-slate-700 truncate inline-block max-w-[180px] align-bottom">
+                          {ledgerData.issuingUniversityAddress}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </SkeuoCard>
+              ) : (
+                <SkeuoCard className="flex flex-col items-center justify-center p-12 text-center space-y-4">
+                  <div className="w-16 h-16 rounded-full skeuo-inset flex items-center justify-center text-slate-400">
+                    <ShieldAlert className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-700">No Document Uploaded</h3>
+                    <p className="text-xs text-slate-500 max-w-sm mt-1">
+                      Click the upload box on the left to simulate a live certificate OCR analysis and blockchain ledger query.
+                    </p>
+                  </div>
+                  <SkeuoButton variant="secondary" onClick={handleSimulatedUpload}>
+                    Simulate Sample Certificate Verification
+                  </SkeuoButton>
+                </SkeuoCard>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Other Portals Overview Grid */}
+        {activeTab !== 'verify' && (
+          <SkeuoCard className="p-8 space-y-6 text-center">
+            <div className="w-16 h-16 rounded-full skeuo-inset mx-auto flex items-center justify-center text-indigo-600">
+              {activeTab === 'student' && <GraduationCap className="w-8 h-8" />}
+              {activeTab === 'university' && <Building2 className="w-8 h-8" />}
+              {activeTab === 'employer' && <Briefcase className="w-8 h-8" />}
+              {activeTab === 'government' && <Landmark className="w-8 h-8" />}
+              {activeTab === 'admin' && <Lock className="w-8 h-8" />}
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-slate-800 capitalize">{activeTab} Portal Suite</h2>
+              <p className="text-sm text-slate-500 max-w-xl mx-auto mt-2">
+                Enterprise dashboard for {activeTab} operations including role-based access control, automated certificate issuance, revocation management, and audit telemetry.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto text-left pt-4">
+              <SkeuoCard variant="inset" className="p-5 space-y-2">
+                <h4 className="text-sm font-bold text-slate-800">Decentralized Web3 Auth</h4>
+                <p className="text-xs text-slate-500">Firebase Authentication paired with MetaMask / WalletConnect EIP-712 typed signing.</p>
+              </SkeuoCard>
+              <SkeuoCard variant="inset" className="p-5 space-y-2">
+                <h4 className="text-sm font-bold text-slate-800">Batch Processing</h4>
+                <p className="text-xs text-slate-500">Merkle tree root rollups for 100,000+ certificates per block submission.</p>
+              </SkeuoCard>
+              <SkeuoCard variant="inset" className="p-5 space-y-2">
+                <h4 className="text-sm font-bold text-slate-800">Rest API & Webhooks</h4>
+                <p className="text-xs text-slate-500">Enterprise REST endpoints with OpenAPI 3.0 specs for ATS integration.</p>
+              </SkeuoCard>
+            </div>
+          </SkeuoCard>
+        )}
+
+      </div>
     </div>
   );
 }

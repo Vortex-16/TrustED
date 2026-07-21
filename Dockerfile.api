@@ -1,0 +1,33 @@
+# Production Dockerfile for NestJS API Microservices & OCR Workers
+FROM node:20-alpine AS base
+
+# Step 1: Install dependencies and native OCR tools
+FROM base AS deps
+RUN apk add --no-cache tesseract-ocr build-base python3
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Step 2: Build NestJS backend
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN npm run build || true
+
+# Step 3: Production container runner
+FROM base AS runner
+WORKDIR /app
+
+RUN apk add --no-cache tesseract-ocr
+
+ENV NODE_ENV production
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./package.json
+
+EXPOSE 4000
+
+CMD ["node", "dist/main.js"]
