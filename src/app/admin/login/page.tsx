@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { SkeuoCard } from '@/components/ui/skeuo-card';
 import { SkeuoButton } from '@/components/ui/skeuo-button';
 import { SkeuoInput } from '@/components/ui/skeuo-input';
-import { Lock, KeyRound, Mail, AlertTriangle } from 'lucide-react';
+import { Lock, KeyRound, Mail, AlertTriangle, UserCheck, Landmark } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -18,6 +18,11 @@ export default function AdminLoginPage() {
   const [email, setEmail] = useState('admin@gov.in');
   const [password, setPassword] = useState('password123');
   const [loginError, setLoginError] = useState<string | null>(null);
+
+  const fillDemoCredentials = () => {
+    setEmail('auditor@education.gov.in');
+    setPassword('GovtAdmin#2025');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,8 +47,28 @@ export default function AdminLoginPage() {
           </div>
           <h2 className="text-2xl font-black text-slate-800 tracking-tight">Admin & Govt Portal</h2>
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            Secure access for authorized personnel only
+            Secure access for government auditors
           </p>
+        </div>
+
+        {/* Public Prototype Demo Credentials Card */}
+        <div className="skeuo-inset p-3.5 rounded-2xl border border-indigo-200/60 bg-indigo-50/50 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-black uppercase tracking-wider text-indigo-800 flex items-center gap-1.5">
+              <UserCheck className="w-3.5 h-3.5 text-indigo-600" /> Public Demo Credentials
+            </span>
+            <button
+              type="button"
+              onClick={fillDemoCredentials}
+              className="text-[10px] font-bold text-indigo-700 hover:text-indigo-900 bg-white px-2 py-0.5 rounded-md border border-indigo-200 shadow-sm"
+            >
+              Auto-Fill Demo
+            </button>
+          </div>
+          <div className="text-[11px] font-mono text-slate-700 space-y-0.5">
+            <p><span className="text-slate-400">Govt Email:</span> auditor@education.gov.in</p>
+            <p><span className="text-slate-400">Pass:</span> GovtAdmin#2025</p>
+          </div>
         </div>
 
         {/* Error Notification */}
