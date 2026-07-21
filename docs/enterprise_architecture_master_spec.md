@@ -491,36 +491,36 @@ Detailed cloud network infrastructure specifying VPC subnets, security groups, d
 ## 20. Component Diagram (Mermaid Diagram 9)
 
 ```mermaid
-component
-    package "VerifyEd Web Client" {
-        [UI Portal Components]
-        [Skeuomorphic Theme Engine]
-        [Zustand State Store]
-    }
+flowchart TD
+    subgraph WebClient ["VerifyEd Web Client"]
+        UIP["UI Portal Components"]
+        STE["Skeuomorphic Theme Engine"]
+        ZSS["Zustand State Store"]
+    end
 
-    package "VerifyEd Core Backend" {
-        [API Controllers]
-        [Auth & Security Module]
-        [Verification Engine]
-        [Fraud AI Pipeline]
-    }
+    subgraph Backend ["VerifyEd Core Backend"]
+        APIC["API Controllers"]
+        ASM["Auth & Security Module"]
+        VE["Verification Engine"]
+        FAP["Fraud AI Pipeline"]
+    end
 
-    package "External Infrastructure" {
-        [Firebase Authentication]
-        [PostgreSQL Database]
-        [IPFS Node]
-        [Polygon Blockchain]
-    }
+    subgraph ExternalInfra ["External Infrastructure"]
+        FA["Firebase Authentication"]
+        PG["PostgreSQL Database"]
+        IPFS["IPFS Node"]
+        BC["Polygon Blockchain"]
+    end
 
-    [UI Portal Components] --> [Zustand State Store]
-    [UI Portal Components] --> [API Controllers]
-    [API Controllers] --> [Auth & Security Module]
-    [API Controllers] --> [Verification Engine]
-    [Verification Engine] --> [Fraud AI Pipeline]
-    [Auth & Security Module] --> [Firebase Authentication]
-    [Verification Engine] --> [PostgreSQL Database]
-    [Verification Engine] --> [IPFS Node]
-    [Verification Engine] --> [Polygon Blockchain]
+    UIP --> ZSS
+    UIP --> APIC
+    APIC --> ASM
+    APIC --> VE
+    VE --> FAP
+    ASM --> FA
+    VE --> PG
+    VE --> IPFS
+    VE --> BC
 ```
 
 ---
