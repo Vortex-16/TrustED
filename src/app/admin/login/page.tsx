@@ -1,78 +1,101 @@
 'use client';
 
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { UserCog } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
+import { SkeuoCard } from '@/components/ui/skeuo-card';
+import { SkeuoButton } from '@/components/ui/skeuo-button';
+import { SkeuoInput } from '@/components/ui/skeuo-input';
+import { Lock, KeyRound, Mail, AlertTriangle } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const { signIn, loading, error } = useAuth();
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const [email, setEmail] = useState('admin@gov.in');
+  const [password, setPassword] = useState('password123');
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push('/admin/dashboard');
+    setLoginError(null);
+
+    try {
+      await signIn(email, password);
+      router.push('/admin/dashboard');
+    } catch (err: any) {
+      setLoginError(err.message || 'Authentication failed');
+    }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4 py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <UserCog className="w-12 h-12 text-primary" />
+    <div className="min-h-[calc(100vh-6rem)] bg-[#EAEFF5] flex items-center justify-center p-4">
+      <SkeuoCard variant="raised" className="w-full max-w-md p-8 space-y-6">
+
+        {/* Header Section */}
+        <div className="text-center space-y-2">
+          <div className="w-16 h-16 rounded-2xl skeuo-inset mx-auto flex items-center justify-center text-indigo-600">
+            <Lock className="w-8 h-8" />
           </div>
-          <CardTitle className="text-2xl font-headline">
-            Admin & Government Portal
-          </CardTitle>
-          <CardDescription>
-            Secure access for authorized personnel only.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-4" onSubmit={handleSignIn}>
-            <div className="space-y-2">
-              <Label htmlFor="email">Official Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="official.user@gov.in"
-                defaultValue="admin@gov.in"
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="#"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <Input id="password" type="password" defaultValue="password" />
-            </div>
-            <Button type="submit" className="w-full font-bold">
-              Sign In
-            </Button>
-          </form>
-          <div className="mt-4 text-center text-sm">
-            <p className="text-muted-foreground">
-              Having trouble signing in?{' '}
-              <Link href="/help" className="text-primary hover:underline">
-                Get Support
-              </Link>
-            </p>
+          <h2 className="text-2xl font-black text-slate-800 tracking-tight">Admin & Govt Portal</h2>
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            Secure access for authorized personnel only
+          </p>
+        </div>
+
+        {/* Error Notification */}
+        {(loginError || error) && (
+          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-semibold flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{loginError || error}</span>
           </div>
-        </CardContent>
-      </Card>
+        )}
+
+        {/* Form Inputs */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <SkeuoInput
+            label="Official Gov Email"
+            type="email"
+            placeholder="official.user@gov.in"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            icon={<Mail className="w-4 h-4 text-slate-400" />}
+            required
+          />
+
+          <SkeuoInput
+            label="Security Password"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            icon={<KeyRound className="w-4 h-4 text-slate-400" />}
+            required
+          />
+
+          {/* Action Button */}
+          <SkeuoButton
+            type="submit"
+            variant="primary"
+            className="w-full shadow-md"
+            disabled={loading}
+          >
+            {loading ? 'Verifying Credentials...' : 'Authenticate Access'}
+          </SkeuoButton>
+        </form>
+
+        {/* Help footer */}
+        <div className="text-center border-t border-slate-200/60 pt-4 text-xs font-medium text-slate-500">
+          <p>
+            Having trouble signing in?{' '}
+            <Link href="/help" className="text-indigo-600 font-bold hover:underline">
+              Get Support
+            </Link>
+          </p>
+        </div>
+
+      </SkeuoCard>
     </div>
   );
 }
